@@ -1,0 +1,16 @@
+# Exclude Python virtual environments
+.venv/
+
+# Exclude IDE configuration files
+.idea/
+
+# Exclude Python cache files
+__pycache__/
+*.pyc
+*.pyo
+
+# Exclude other unnecessary files
+.git/
+.DS_Store
+
+.env
