@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  ar2en:
+    build:
+      context: ./AR2En
+    ports:
+      - "8003:8003"
+ 
+    networks:
+      - service-network
+  en2ar:
+    build:
+      context: ./En2Ar
+    ports:
+      - "8001:8001" 
+    networks:
+      - service-network
+
+networks:
+  service-network:
+    external: true
