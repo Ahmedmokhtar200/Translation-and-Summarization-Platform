@@ -1,0 +1,60 @@
+
+services:
+  db:
+    image: 'postgres:latest'
+    environment:
+      POSTGRES_USER: admin 
+      POSTGRES_PASSWORD: 1234 
+      POSTGRES_DB: supertokens
+    ports:
+      - 5432:5432
+    networks:
+      service-network:
+        ipv4_address: 10.0.0.22
+    volumes:
+      - ./pgData:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'pg_isready', '-U', 'admin', '-d', 'supertokens']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  supertokens:
+    image: registry.supertokens.io/supertokens/supertokens-postgresql:9.3.0
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - 3567:3567
+    environment:
+      POSTGRESQL_CONNECTION_URI: "postgresql://admin:1234@db:5432/supertokens"
+    restart: unless-stopped
+    healthcheck:
+      test: >
+        bash -c 'exec 3<>/dev/tcp/127.0.0.1/3567 && echo -e "GET /hello HTTP/1.1\r\nhost: 127.0.0.1:3567\r\nConnection: close\r\n\r\n" >&3 && cat <&3 | grep "Hello"'
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      service-network:
+        ipv4_address: 10.0.0.21
+      
+  
+  user_service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: user_service
+    image: ahmedmokhtar24/user_service:latest
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app
+    networks:
+      service-network:
+        ipv4_address: 10.0.0.20
+      
+networks:
+  service-network:
+    external: true
