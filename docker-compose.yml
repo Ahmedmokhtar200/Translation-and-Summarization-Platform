@@ -1,0 +1,45 @@
+version: '3.9'
+services:
+  summarization-db:
+    image: 'postgres:latest'
+    env_file:
+      - .env
+    ports:
+      - "5435:5432"
+    restart: unless-stopped
+    volumes:
+      - ./pgData:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD', 'pg_isready', '-U', 'postgres', '-d', 'summarization']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      service-network:
+        ipv4_address: 10.0.0.50
+
+
+  web:
+    build: .
+    image: ahmedmokhtar24/summrization_service:latest
+    container_name: summarization_service
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+#    should be secret
+    environment:
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    depends_on:
+      - summarization-db
+    env_file:
+      - .env
+    networks:
+      service-network:
+        ipv4_address: 10.0.0.51
+
+networks:
+  service-network:
+    external: true
