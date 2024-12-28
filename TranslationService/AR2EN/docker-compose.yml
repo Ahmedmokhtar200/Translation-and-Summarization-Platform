@@ -1,0 +1,45 @@
+services:
+  ar2en-db:
+    image: 'postgres:latest'
+    env_file:
+      - .env
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    # Without this, you will lose the data if you bring down the container.
+    volumes:
+      - ./pgData:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'pg_isready', '-U', 'postgres', '-d', 'ar2en']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      service-network:
+        ipv4_address: 10.0.0.3
+
+  ar2en_service:
+    build: .
+    image: ahmedmokhtar24/ar2en:latest
+    container_name: ar2en_service
+    environment:
+      - DB_URL=postgressql://postgres:postgres@ar2en:5432/postgres
+    volumes:
+      - .:/code
+    ports:
+      - "8003:8003"
+    depends_on:
+      - ar2en-db
+    env_file:
+      - .env
+    networks:
+      service-network:
+        ipv4_address: 10.0.0.4
+
+networks:
+  service-network:
+    external: true
