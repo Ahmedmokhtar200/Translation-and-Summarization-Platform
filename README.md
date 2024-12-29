@@ -29,7 +29,7 @@ Welcome to **Translate & Summarize It**, a comprehensive solution designed for s
 
 This project offers:
 
-1. **Language Translation**: Translate text between multiple languages with high accuracy.
+1. **Language Translation**: Translate text from arabic to english and viceversa with high accuracy.
 2. **Text Summarization**: Generate concise summaries from lengthy text inputs.
 3. **High Performance**: Delivers results quickly and efficiently.
 4. **Open Source**: Freely available for use, modification, and contribution.
@@ -42,7 +42,7 @@ Follow these steps to set up the project:
 
 1. **Clone this repository**:
    ```bash
-   git clone https://github.com/yourusername/translate-summarize-it.git
+   git clone https://github.com/ahmedmokhtar200/translation-and-summrization-platform.git
    ```
 2. **Navigate to the project directory**:
    ```bash
