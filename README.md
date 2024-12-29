@@ -104,5 +104,5 @@ Gratitude to:
 - Libraries and frameworks utilized in this project.
 - Supporters and testers who provided valuable feedback.
 
-For inquiries or support, please contact [your-email@example.com].
+For inquiries or support, please contact [ahmedmokhtar24@gmail.com].
 
